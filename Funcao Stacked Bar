@@ -1,0 +1,41 @@
+"""
+    #coding: utf-8
+    Description of the Function
+    The function takes 3 parameters from a predefined dataset and creates a stacked bar chart.
+
+    Parameters:
+    data:  dataframe
+        Description of data (pre-defined data set)
+    valor: float
+        Description of valor (column with values that will be converted to percentage)
+    colX:  object
+        Description of valor (column with categorical information that will be used on the x axis)
+    colStacked:  object
+        Description of valor (column with categorical information that will split the stacked column)
+
+    Return:    
+    plot funcaoStackedBar
+
+    """ 
+    
+    import os
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+%matplotlib inline
+
+data=pd.read_csv('nome do arquivo.csv', delimiter=';', skiprows=0, low_memory=False, decimal=',')
+dataframe = pd.DataFrame(data)
+
+def funcaoStackedBar(data,valor, colX, colStacked):  
+    
+    data[f'perc_{valor}'] = data.apply(lambda x: (x[f'{valor}'] / x[f'{valor}']/ data[f'{valor}'].sum())*100, axis = 1)
+    tps = data.pivot_table(values=f'perc_{valor}', index=colX, columns=colStacked, aggfunc='sum')
+
+    tps = tps.div(tps.sum(1), axis=0)
+    tps.plot(kind='bar', stacked=True, figsize=(20,10), title='Gráfico de Barras Empilhadas')
+    
+    funcaoStackedBar(data,'nome da coluna com valores', 'nome da coluna que vai fazer a divisão da barra', 'nome da colune do eixo Y')
+   
+    
