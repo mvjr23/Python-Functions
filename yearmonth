@@ -1,0 +1,32 @@
+# importando bibliotecas
+
+import pandas as pd
+import numpy as np
+
+# função que gera o ano e mês da data
+
+def date_desmembrator(data,date_fields=[]):
+    '''
+    Creates support fields for the specified date fields of a dataframe
+    The following columns will be added for each date field:
+    
+    field_year: year of the date
+    field_month: month of the date
+    field_yearmonth: concatenates year and month
+ 
+    parameters:
+    data: pandas dataframe
+    date_fields: list of date fields
+
+    return:
+    dataframe with date support columns added
+    '''
+
+    for d in date_fields:
+        data[d]=pd.to_datetime(data[d])
+        data.loc[data[d].notnull(),f'{d}_year']=data.loc[data[d].notnull(),d].dt.year.astype(str)
+        data.loc[data[d].notnull(),f'{d}_month']=data.loc[data[d].notnull(),d].dt.month.map("{:02}".format)
+        data.loc[data[d].notnull(),f'{d}_yearmonth']= data.loc[data[d].notnull(),f'{d}_year']+data.loc[data[d].notnull(),f'{d}_month']
+    return data
+
+   
